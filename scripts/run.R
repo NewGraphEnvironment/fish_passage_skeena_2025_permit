@@ -19,7 +19,7 @@ staticimports::import()
 
   # DFO-specific attachments: trim the map and site list pages
   page_map <- 5
-  page_site_list <- 6:12
+  page_site_list <- 6:9
 
   input_pdf <- fs::path("docs", paste0(name_memo, ".pdf"))
 
