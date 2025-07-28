@@ -8,9 +8,9 @@ output:
 links-to-footnotes: false
 paged-footnotes: false
 params:
-  repo_url: 'https://github.com/NewGraphEnvironment/fish_passage_fraser_2025_permit'
-  report_url: 'https://NewGraphEnvironment.github.io/fish_passage_fraser_2025_permit/'
-  gis_project_name: "sern_fraser_2024"
+  repo_url: 'https://github.com/lucy-schick/fish_passage_skeena_2025_permit'
+  report_url: 'https://lucy-schick.github.io/fish_passage_skeena_2025_permit/'
+  gis_project_name: "sern_skeena_2023"
   update_packages: FALSE
 bibliography: "`r rbbt::bbt_write_bib('references.bib', overwrite = TRUE)`"
 biblio-style: apalike
@@ -68,10 +68,11 @@ link_kml <- glue::glue("{params$repo_url}/raw/main/mapping/sites_{project_region
 
 # Specify the target species likely to be tagged since we include so many. Varies from region to region and can be determined from
 # past data (if this is a multi-year project)
-target_species <- c("rainbow trout", "bull trout", "burbot")
+target_species <- c('rainbow trout', 'cutthrout trout', 'dolly varden')
 
 # This varies depending on the date the file was created
-gis_planning_file <- "planning_20250721.gpkg"
+# No planning file for skeena 2025, just going to old sites.
+# gis_planning_file <- "planning_20250721.gpkg"
 
 
 ```
@@ -108,10 +109,14 @@ Please note that permitting to Fisheries and Oceans Canada is requested for inve
 
 ## Brief description of project/activities {-}
 
-This work is a multi-year collaboration of many groups and an initiative of the Society for Ecosystem Restoration Northern BC. Funding for the project is through the Habitat Conservation Trust Foundation, Society for Ecosystem Restoration Northern BC, and the Ministry of Transportation and Infrastructure (MoTI). Al Irvine, R.P.Bio from New Graph Environment Ltd. is leading the fieldwork with field and office collaboration with teams from throughout the study area. Previous reports are provided below:
+This work is a multi-year collaboration of many groups and an initiative of the Society for Ecosystem Restoration Northern BC. Funding for the project is through the Habitat Trust Conservation Foundation, Ministry of Transportation and Infrastructure and the Provincial Fish Passage Technical Working Group. Al Irvine, R.P.Bio from New Graph Environment Ltd. is leading the fieldwork with field and office collaboration with teams from the Office of Wet’suwet’en (contact Julia Onderwater - Julia.Onderwater@wetsuweten.com or Dave Dewit - david.dewit@wetsuweten.com), Gitskan Watershed Authorities (contact Alicia Fernando - afernando@gitksanwatershed.com ) and Gitsxan Environmental Services (contact Chaz Ware - chaz.ware@gitxsanbusiness.com ). Previous reports are provided below:
 
-- https://www.newgraphenvironment.com/fish_passage_fraser_2023_reporting/
-- https://www.newgraphenvironment.com/fish_passage_moti_2022_reporting/
+- https://www.newgraphenvironment.com/fish_passage_bulkley_2020_reporting/
+- https://www.newgraphenvironment.com/fish_passage_skeena_2021_reporting/
+- https://www.newgraphenvironment.com/fish_passage_bulkley_2022_reporting/
+- https://www.newgraphenvironment.com/fish_passage_skeena_2022_reporting/
+- https://www.newgraphenvironment.com/fish_passage_skeena_2023_reporting/
+- https://www.newgraphenvironment.com/fish_passage_skeena_2024_reporting/
 
 <br>
 
@@ -174,36 +179,26 @@ Please do not hesitate to contact me if you need more information or have any qu
 
 
 
-![signature](/Users/airvine/Projects/current/Admin/Al_Sig.jpg){width=50%}
+<!-- ![signature](/Users/airvine/Projects/current/Admin/Al_Sig.jpg){width=50%} -->
 Al Irvine, R.P.Bio 
 
 ```{r pull-db}
 
 # Identify the sites from previous years that we will be returning to again.
 site_review_ids <- c(
-  #Dog Creek
-  199173, 
-  # 199174, 
-  # Burnt Cabin
-  199171,
-  7622,
-  # Scotch
-  199172,
-  # 199328,
-  # Clear Creek
-  199190,
-  # Trib to Sugarbowl
-  199260,
-  # Driscoll
-  199267,
-  # Teepee 
-  199278, 
-  # 203302,
-  # 4931
-  # snowshoe what the heck..
-  199237
-  )
-
+  # Peacock
+  197962,
+  # Glen Vowell
+  198217,
+  # Trib to Buck
+  197640,
+  # Trib to Lamprey
+  198064,
+  # Corya Creek
+  197960,
+  # Thompson
+  123377
+)
 
 # grab the crossings data from bcfishpass
 sites_for_review <- fpr::fpr_db_query(
@@ -220,29 +215,37 @@ sites_for_review <- fpr::fpr_db_query(
 
 
 
+# skeena 2025 - we are just going to old sites, there is no planning file.
 
 # Grab all the new sites that we have identified in the planning file
-path_gis_planning <- fs::path("~/Projects/gis/", params$gis_project_name, gis_planning_file)
-
-sites_planning_raw <- fpr::fpr_sp_gpkg_backup(
-  path_gpkg = path_gis_planning,
-  update_utm = TRUE,
-  write_back_to_path = FALSE,
-  write_to_csv = TRUE,
-  write_to_rdata = TRUE,
-  return_object = TRUE)
-
-# Grab only the sites with my_priority = mod or high
-sites_planning <- sites_planning_raw |> 
-  dplyr::filter(my_priority %in% c("mod", "high"))
-
-
+# path_gis_planning <- fs::path("~/Projects/gis/", params$gis_project_name, gis_planning_file)
+# 
+# sites_planning_raw <- fpr::fpr_sp_gpkg_backup(
+#   path_gpkg = path_gis_planning,
+#   update_utm = TRUE,
+#   write_back_to_path = FALSE,
+#   write_to_csv = TRUE,
+#   write_to_rdata = TRUE,
+#   return_object = TRUE)
+# 
+# # Grab only the sites with my_priority = mod or high
+# sites_planning <- sites_planning_raw |> 
+#   dplyr::filter(my_priority %in% c("mod", "high"))
 
 
-# join the review and planning sites together
-sites_all <- dplyr::bind_rows(
-  sites_planning,
-  sites_for_review) |> 
+
+
+# # join the review and planning sites together
+# sites_all <- dplyr::bind_rows(
+#   sites_planning,
+#   sites_for_review) |> 
+#   dplyr::mutate(my_crossing_reference = dplyr::case_when(!is.na(stream_crossing_id) ~ stream_crossing_id,
+#                                                   TRUE ~ modelled_crossing_id),
+#                 my_crossing_reference = as.character(my_crossing_reference))
+
+
+# Code for when we only have review sites.
+sites_all <- sites_for_review |>
   dplyr::mutate(my_crossing_reference = dplyr::case_when(!is.na(stream_crossing_id) ~ stream_crossing_id,
                                                   TRUE ~ modelled_crossing_id),
                 my_crossing_reference = as.character(my_crossing_reference))
@@ -300,11 +303,9 @@ table_sites <- dplyr::left_join(
   sites_all |> 
     dplyr::select(id = my_crossing_reference,
          modelled_crossing_id,
-         bt_network_km,
-         bt_spawning_km,
-         bt_rearing_km,
-         ch_spawning_km, # Grab ch_spawning_km and ch_rearing_km because LSAL watershed only has CH no BT
-         ch_rearing_km,
+         st_network_km,
+         st_spawning_km,
+         st_rearing_km,
          utm_zone,
          utm_easting,
          utm_northing,
@@ -314,16 +315,22 @@ table_sites <- dplyr::left_join(
          gnis_stream_name, 
          stream_name = pscis_stream_name, 
          observedspp_upstr,
-         my_priority,
-         my_priority_comments),
+         # my_priority, # skeena 2025 - we are just going to old sites, there is no planning file.
+         # my_priority_comments
+         ),
 
   wscodes |> 
     dplyr::select(modelled_crossing_id, wsc_code = watershed_code_50k_parsed),
 
   by = 'modelled_crossing_id'
 ) |>  
+    # add the missing watershed code for the Sik-E-Dakh crossing that didn't have have one... see https://github.com/NewGraphEnvironment/fish_passage_skeena_2024_permit/issues/2
+  dplyr::mutate(wsc_code = dplyr::case_when(
+    id == 198217 ~ "400-448500-00000-00000-0000-0000-000-000-000-000-000-000",
+    T ~ wsc_code)
+  ) |> 
    # do some clean up and wrangle
-  dplyr::mutate(dplyr::across(dplyr::starts_with('bt_'), ~round(., 1))) |> 
+  dplyr::mutate(dplyr::across(dplyr::starts_with('st_'), ~round(., 1))) |> 
   dplyr::arrange(id) |>  
   dplyr::mutate(stream_name = dplyr::case_when(is.na(stream_name) ~ gnis_stream_name,
                                                 T ~ stream_name),
@@ -399,9 +406,13 @@ path_gps <- paste0(prefix, "_", date_today, ".gpx")
 
 # make a gpx file for loading into the gps
 table_sites |> 
-  dplyr::mutate(desc = paste0("bt_rearing - ", bt_rearing_km, "km. ", my_priority_comments),
+  # Skeena 2025 - no planning file so no priority comments
+  # dplyr::mutate(desc = paste0("st_rearing - ", st_rearing_km, "km. ", my_priority_comments),
+    dplyr::mutate(desc = paste0("st_rearing - ", st_rearing_km, "km. "),
          # make a name that tells a story so we see it on the gps
-         name = paste0(id, " - ", my_priority)) |> 
+         # name = paste0(id, " - ", my_priority)) |> 
+         name = paste0(id)) |> 
+  
   # drop z dimension
   # st_zm() |> 
   dplyr::distinct(id, .keep_all = T) |>
@@ -419,7 +430,9 @@ path_kml <- paste0(prefix, "_", date_today, ".kml")
 
 # Write today's KML file
 table_sites |> 
-  dplyr::mutate(name = paste0(id, " - ", my_priority)) |> 
+   # Skeena 2025 - no planning file so no priority comments
+  # dplyr::mutate(name = paste0(id, " - ", my_priority)) |> 
+    dplyr::mutate(name = paste0(id)) |> 
   sf::st_write(
     dsn = paste0("mapping/", path_kml),
     delete_dsn = TRUE,
