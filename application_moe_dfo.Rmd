@@ -8,8 +8,8 @@ output:
 links-to-footnotes: false
 paged-footnotes: false
 params:
-  repo_url: 'https://github.com/lucy-schick/fish_passage_skeena_2025_permit'
-  report_url: 'https://lucy-schick.github.io/fish_passage_skeena_2025_permit/'
+  repo_url: 'https://github.com/NewGraphEnvironment/fish_passage_skeena_2025_permit'
+  report_url: 'https://NewGraphEnvironment.com/fish_passage_skeena_2025_permit/'
   gis_project_name: "sern_skeena_2023"
   update_packages: FALSE
 bibliography: "`r rbbt::bbt_write_bib('references.bib', overwrite = TRUE)`"
@@ -179,7 +179,7 @@ Please do not hesitate to contact me if you need more information or have any qu
 
 
 
-<!-- ![signature](/Users/airvine/Projects/current/Admin/Al_Sig.jpg){width=50%} -->
+![signature](/Users/airvine/Projects/current/Admin/Al_Sig.jpg){width=50%}
 Al Irvine, R.P.Bio 
 
 ```{r pull-db}
