@@ -351,7 +351,7 @@ table_sites |>
 # here we produce a minimal table to copy paste in the DFO pdf
 formatted_output <- table_sites |> 
   sf::st_drop_geometry() |> 
-  dplyr::select(id, stream_name, wsc_code) |> 
+  dplyr::select(id, stream_name, wsc_code, utm_zone, utm_easting, utm_northing) |> 
   dplyr::mutate(
     max_id_width = max(nchar(id)),
     max_name_width = max(nchar(stream_name), na.rm = TRUE)
@@ -366,12 +366,13 @@ formatted_output <- table_sites |>
     headers <- c(
       stringr::str_pad("id", max(nchar(.$id)), side = "right"),
       stringr::str_pad("stream_name", max(nchar(.$stream_name)), side = "right"),
-      "wsc_code"  # Assuming wsc_code doesn't need padding, otherwise calculate it similarly
+      "wsc_code",  # Assuming wsc_code doesn't need padding, otherwise calculate it similarly
+      "utm_zone", "utm_easting", "utm_northing"
     )
     
     # Combine the header and the data
     headers <- paste(headers, collapse = "\t")
-    formatted_rows <- pmap_chr(., ~ paste(..., collapse = "\t"))
+    formatted_rows <- purrr::pmap_chr(., ~ paste(..., collapse = "\t"))
     
     paste(c(headers, formatted_rows), collapse = "\n")
   }
